@@ -8,7 +8,7 @@
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" v-model="username">
           </div>
-          
+          {{ username }}
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" v-model="password">
@@ -22,23 +22,36 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-definePageMeta({
-  layout: false,
-});
-
+<script>
 import { ref } from 'vue';
 
-const username = ref('')
-const password = ref('')
+export default {
+  setup() {
+    definePageMeta({
+      layout: false
+    })
 
-async function login() {
-  const login = await useFetch('/v1/auth/login', {
-    username: username.value,
-    password: password.value
-  });
+    const username = ref('');
+    const password = ref('');
 
-  console.log(login.data)
+    async function login() {
+      const login = await useMyFetch('/v1/auth/login', {
+        method: 'POST',
+        body: {
+          username,
+          password
+        }
+      })
+
+      console.log(login.data)
+    }
+
+    return {
+      username,
+      password,
+      login
+    }
+  },
 }
 </script>
 

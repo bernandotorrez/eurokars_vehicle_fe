@@ -14,9 +14,8 @@ export default defineNuxtConfig({
     "bootstrap/scss/bootstrap.scss"
   ],
   runtimeConfig: {
-    // Keys within public are also exposed client-side
     public: {
-      apiBase: 'http://localhost:3000/api-gateway'
-    }
-  }
+      baseURL: process.env.BASE_URL,
+    },
+  },
 })
