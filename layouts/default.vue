@@ -7,7 +7,3 @@
         <AppFooter/>
     </div>
 </template>
-
-<script>
-
-</script>
