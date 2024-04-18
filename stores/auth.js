@@ -32,7 +32,9 @@ export const useAuthStore = defineStore('auth', {
           const decodedAccessToken = jwtDecode(accessToken);
           const refreshToken = headers.get('eurokars-auth-refresh-token');
     
-          const cookieAuthToken = useCookie('eurokars-auth-token');
+          const cookieAuthToken = useCookie('eurokars-auth-token', {
+            maxAge: 60 * 60 * 24
+          });
           cookieAuthToken.value = accessToken;
     
           const cookieRefreshToken = useCookie('eurokars-auth-refresh-token');
