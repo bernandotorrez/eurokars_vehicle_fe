@@ -25,11 +25,14 @@
         </b-tr>
       </b-thead>
       <b-tbody>
-        <b-tr v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
+        <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
           <b-td text-alignment="center">{{ index+1 }}</b-td>
           <b-td>{{ vehicle.model }}</b-td>
           <b-td>{{ vehicle.type }}</b-td>
           <b-td>{{ vehicle.colour }}</b-td>
+        </b-tr>
+        <b-tr v-if="!vehiclesData">
+          <b-td text-alignment="center" colspan="4">Loading ...</b-td>
         </b-tr>
       </b-tbody>
     </b-table>

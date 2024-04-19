@@ -38,7 +38,9 @@ export const $axios = () => {
                         const authToken = context.response.headers.get('eurokars-auth-token')
                         error.config.headers['Eurokars-Auth-Token'] = authToken;
 
-                        const cookieAuthToken = useCookie('eurokars-auth-token');
+                        const cookieAuthToken = useCookie('eurokars-auth-token', {
+                            maxAge: 60 * 60 * 24
+                        });
                         cookieAuthToken.value = authToken;
                     }
                 })
