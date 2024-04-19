@@ -39,11 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 const vehiclesData = ref([]);
-
-const authToken = useCookie('eurokars-auth-token').value;
 
 const query = {
   page: {
@@ -58,11 +56,7 @@ const query = {
 
 const param = objectToQueryString(query)
 
-const vehicles = await $axios().get(`/v1/vehicle?${param}`, { 
-  headers: {
-    'Eurokars-Auth-Token': authToken
-  } 
-})
+const vehicles = await $axios().get(`/v1/vehicle?${param}`)
 
 vehiclesData.value = vehicles.data
 </script>

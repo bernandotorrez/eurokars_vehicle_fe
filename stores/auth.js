@@ -29,7 +29,6 @@ export const useAuthStore = defineStore('auth', {
         
         if (this.loginData?.username) {
           const accessToken = headers.get('eurokars-auth-token');
-          const decodedAccessToken = jwtDecode(accessToken);
           const refreshToken = headers.get('eurokars-auth-refresh-token');
     
           const cookieAuthToken = useCookie('eurokars-auth-token', {
@@ -55,12 +54,23 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async authLogout () {
-      const cookieAuthToken = useCookie('eurokars-auth-token')
-      cookieAuthToken.value = null;
-      const cookieRefreshToken = useCookie('eurokars-auth-refresh-token');
-      cookieRefreshToken.value = null;
+      try {
+        const logout = await $axios().delete('/v1/auth/logout')
 
-      this.resetState();
+        if (logout.data.code === 200) {
+          const cookieAuthToken = useCookie('eurokars-auth-token')
+          cookieAuthToken.value = null;
+
+          const cookieRefreshToken = useCookie('eurokars-auth-refresh-token');
+          cookieRefreshToken.value = null;
+
+          this.resetState();
+
+          return navigateTo('/login')
+        }
+      } catch (error) {
+        alert(error.message)
+      }
     },
     async resetState () {
       this.isLoading = false;
