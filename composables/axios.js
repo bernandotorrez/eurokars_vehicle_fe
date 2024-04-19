@@ -14,9 +14,7 @@ export const $axios = () => {
 
         config.headers['Eurokars-Auth-Token'] = authToken;
         config.headers['Eurokars-Auth-Refresh-Token'] = refreshToken;
-
-        console.log('request', authToken)
-
+        
         return config;
         }, function (error) {
         // Do something with request error

@@ -1,5 +1,3 @@
-import { jwtDecode } from 'jwt-decode'
-
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoading: false,

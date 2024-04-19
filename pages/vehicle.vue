@@ -25,7 +25,7 @@
         </b-tr>
       </b-thead>
       <b-tbody>
-        <b-tr v-for="( vehicle, index ) in vehiclesData?.data?.rows" v-bind:key="vehicle">
+        <b-tr v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
           <b-td text-alignment="center">{{ index+1 }}</b-td>
           <b-td>{{ vehicle.model }}</b-td>
           <b-td>{{ vehicle.type }}</b-td>
@@ -38,10 +38,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue';
 
-const vehiclesData = ref([]);
+const vehiclesData = ref();
 
 const query = {
   page: {
@@ -56,9 +56,15 @@ const query = {
 
 const param = objectToQueryString(query)
 
-const vehicles = await $axios().get(`/v1/vehicle?${param}`)
+onMounted(async () => {
+  try{
+    const vehicles = await $axios().get(`/v1/vehicle?${param}`);
 
-vehiclesData.value = vehicles.data
+    vehiclesData.value = vehicles.data.data.rows;
+  } catch (error) {
+    vehiclesData.value = [];
+  }
+})
 </script>
 
 <style>
