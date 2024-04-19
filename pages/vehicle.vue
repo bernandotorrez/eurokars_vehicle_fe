@@ -31,7 +31,7 @@
           <b-td>{{ vehicle.type }}</b-td>
           <b-td>{{ vehicle.colour }}</b-td>
         </b-tr>
-        <b-tr v-if="!vehiclesData">
+        <b-tr v-else>
           <b-td text-alignment="center" colspan="4">Loading ...</b-td>
         </b-tr>
       </b-tbody>
