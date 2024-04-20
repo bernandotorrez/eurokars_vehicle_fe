@@ -101,29 +101,25 @@ const pageLimit = ref(10);
 const sortValue = ref('model')
 const sortBy = ref('asc')
 
-const query = {
-  page: {
-    limit: pageLimit.value,
-    number: "1"
-  },
-  sort: {
-    value: sortValue.value,
-    sorting: sortBy.value
-  }
-}
-
-const param = objectToQueryString(query)
-
 const getVehicles = async () => {
   try {
 
-    let paramSearch = '';
-
-    if (search.value) {
-      paramSearch = `&search=${search.value}`
+    const query = {
+      page: {
+        limit: pageLimit.value,
+        number: "1"
+      },
+      sort: {
+        value: sortValue.value,
+        sorting: sortBy.value
+      }
     }
 
-    const vehicles = await $axios().get(`/v1/vehicle?${param}${paramSearch}`);
+    if (search.value) query.search = search.value
+
+    const param = objectToQueryString(query)
+
+    const vehicles = await $axios().get(`/v1/vehicle?${param}`);
 
     vehiclesData.value = vehicles.data.data.rows;
   } catch (error) {
