@@ -127,18 +127,6 @@
     const addVehicle = handleSubmit(async values => {
         isLoading.value = true;
 
-        const data = {
-            model,
-            type,
-            colour,
-            fuel,
-            chassis,
-            engine_no,
-            date_reg,
-            curr,
-            price
-        }
-
         try {
             const addVehicle = await $axios().post('/v1/vehicle', values)
 
