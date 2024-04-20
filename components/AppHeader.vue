@@ -11,10 +11,15 @@
                 About
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink active to="/vehicle">
+                Vehicle
+              </NavLink>
+            </NavItem>
           </NavbarNavList>
           <BForm flex>
-            <b-a button="outline-light" href="/login">
-              Login
+            <b-a button="outline-light" href="/login" @click="logout">
+              Logout
             </b-a>
           </BForm>
         </NavbarCollapse>
@@ -23,8 +28,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
+const { authLogout } = useAuthStore();
 
+const logout = async () => {
+  await authLogout();
+};
 </script>
-
-<style></style>

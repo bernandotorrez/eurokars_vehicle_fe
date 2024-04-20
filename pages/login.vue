@@ -3,7 +3,7 @@
     <div class="card w-50">
       <div class="card-body">
         <NuxtImg src="https://otodriver.com/image/load/400/225/gallery/eurokars-logo3209.jpg" class="img-fluid img-responsive img-center"/>
-        <Alert theme="danger" class="text-center" v-if="!isSuccess && isClickLogin">
+        <Alert theme="danger" class="text-center" v-if="!isSuccess && failMessage">
           {{ failMessage }}
         </Alert>
         <form @submit.prevent="login">
@@ -24,62 +24,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 
-export default {
-  setup() {
-    definePageMeta({
-      layout: false
-    })
+const { authLogin } = useAuthStore();
 
-    const username = ref('');
-    const password = ref('');
-    const isLoading = ref(false);
-    const isSuccess = ref(false);
-    const loginData = ref({});
-    const isClickLogin = ref(false);
-    const failMessage = ref('');
+const { failMessage, isLoading, isSuccess } = storeToRefs(useAuthStore())
 
-    async function login() {
-      isLoading.value = true;
-      isClickLogin.value = true;
-      failMessage.value = '';
-      
-      try {
-        const login = await $axios().post('/v1/auth/login', {
-          username: username.value,
-          password: password.value
-        })
+definePageMeta({
+  layout: false
+})
 
-        isLoading.value = false
-        
-        const { data } = login;
+const username = ref('');
+const password = ref('');
 
-        isSuccess.value = data.success
-        loginData.value = data.data;
-
-        if (!data.success) failMessage.value = data.message;
-      } catch (error) {
-        const { data } = error.response;
-        const { message } = data;
-
-        isLoading.value = false
-        failMessage.value = message;
-      }
-    }
-
-    return {
-      username,
-      password,
-      isLoading,
-      isSuccess,
-      loginData,
-      isClickLogin,
-      failMessage,
-      login
-    }
-  },
+const login = async () => {
+  await authLogin(username.value, password.value);
 }
 </script>
 

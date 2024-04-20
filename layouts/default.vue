@@ -1,13 +1,9 @@
 <template>
     <div>
         <AppHeader/>
-        <main>
+        <body>
             <slot />
-        </main>
+        </body>
         <AppFooter/>
     </div>
 </template>
-
-<script>
-
-</script>
