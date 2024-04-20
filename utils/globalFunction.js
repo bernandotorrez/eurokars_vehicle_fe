@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 export const objectToQueryString = (query) => {
   let queryString = '';
 
@@ -16,4 +18,12 @@ export const objectToQueryString = (query) => {
   queryString = queryString.slice(0, -1);
 
   return queryString;
+}
+
+export const formatCurrency = (amount) => {
+  return amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+}
+
+export const formatDate = (date) => {
+  return moment(date).tz('Asia/Bangkok').format('DD-MM-YYYY HH:mm:ss');
 }
