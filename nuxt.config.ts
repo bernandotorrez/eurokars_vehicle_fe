@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     { hid: "description", name: "description", content: 'Test' }
   ],
   devtools: { enabled: false },
-  modules: ['usebootstrap', '@nuxt/image', '@pinia/nuxt',],
+  modules: ['usebootstrap', '@nuxt/image', '@pinia/nuxt', '@vee-validate/nuxt'],
   usebootstrap: {
     bootstrap: {
       prefix: ``

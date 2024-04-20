@@ -1,24 +1,27 @@
 <template>
   <div class="container">
-    <div class="row g-3 align-items-center justify-items-center mt-4 col-md-10 offset-md-2">
-      <div class="col-auto">
+    <div class="row g-3 align-items-center justify-items-center mt-4 col-md-12">
+      <div class="col-sm-12 col-lg-3">
         <input type="text" id="search" class="form-control" placeholder="Search" v-model="search">
       </div>
-      <div class="col-auto">
+      <div class="col-4 col-sm-4 col-lg-2">
         <select id="sortValue" class="form-select" v-model="sortValue">
           <option value="">- Sort -</option>
           <option value="model">Model</option>
           <option value="type">Type</option>
+          <option value="colour">Colour</option>
+          <option value="fuel">Fuel</option>
+          <option value="date_reg">Date Reg</option>
         </select>
       </div>
-      <div class="col-auto">
+      <div class="col-4 col-sm-4 col-lg-2">
         <select id="sortBy" class="form-select" v-model="sortBy">
           <option value="">- Sort By -</option>
           <option value="asc">Asc</option>
           <option value="desc">Desc</option>
         </select>
       </div>
-      <div class="col-auto">
+      <div class="col-4 col-sm-4 col-lg-2">
         <select id="limit" class="form-select" v-model="pageLimit">
           <option value="">- Show -</option>
           <option value="5">5</option>
@@ -27,14 +30,17 @@
           <option value="20">20</option>
         </select>
       </div>
-      <div class="col-auto">
+      <div class="col-sm-12 col-lg-1">
         <button class="btn btn-primary" @click="filter" :disabled="!vehiclesData">Search</button>
+      </div>
+      <div class="col-sm-12 col-lg-1 offset-lg-1">
+        <NuxtLink class="btn btn-success" to="/vehicle/add">Add</NuxtLink>
       </div>
     </div>
 
     <div class="row mt-4">
       <div class="col">
-        <b-table hover theme="light" bordered>
+        <b-table hover theme="light" bordered responsive>
           <b-thead>
             <b-tr>
               <b-th scope="col" text-background="primary" text-alignment="center">
