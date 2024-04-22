@@ -121,11 +121,11 @@ const getVehicles = async () => {
       }
     }
 
-    if (search.value) query.search = search.value
-
     const param = objectToQueryString(query)
 
-    const vehicles = await $axios().get(`/v1/vehicle?${param}`);
+    const searchParam = (search.value) ? `&search=${search.value}` : '';
+
+    const vehicles = await $axios().get(`/v1/vehicle?${param}${searchParam}`);
 
     vehiclesData.value = vehicles.data.data.rows;
   } catch (error) {
