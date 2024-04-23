@@ -84,7 +84,7 @@
                 <div class="row mt-4">
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <button class="btn btn-success" type="submit" :disabled="isLoading || errors">Add</button>
+                            <button class="btn btn-success" type="submit" :disabled="isLoading">Add</button>
                         </div>
                     </div>
                 </div>

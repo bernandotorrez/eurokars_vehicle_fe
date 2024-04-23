@@ -1,27 +1,26 @@
 import moment from 'moment-timezone';
 
-export const objectToQueryString = (query) => {
-  let queryString = '';
-
-  for (const key in query) {
-    if (Object.hasOwnProperty.call(query, key)) {
-      const obj = query[key];
-      for (const prop in obj) {
-        if (Object.hasOwnProperty.call(obj, prop)) {
-          queryString += `${key}[${prop}]=${obj[prop]}&`;
-        }
+export const objectToQueryString = (obj) => {
+  let str = '';
+  for (let key in obj) {
+    if (typeof obj[key] === 'object') {
+      for (let subKey in obj[key]) {
+        str += `${key}[${subKey}]=${obj[key][subKey]}&`;
       }
+    } else {
+      str += `${key}=${obj[key]}&`;
     }
   }
-  
-  // Remove the trailing '&'
-  queryString = queryString.slice(0, -1);
-
-  return queryString;
+  // Remove the trailing '&' character
+  str = str.slice(0, -1);
+  return str;
 }
 
 export const formatCurrency = (amount) => {
-  return amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+  return amount.toLocaleString('id-ID', {
+    style: 'currency',
+    currency: 'IDR'
+  });
 }
 
 export const formatDate = (date) => {

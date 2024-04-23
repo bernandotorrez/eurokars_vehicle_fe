@@ -102,7 +102,7 @@
 import { ref } from 'vue';
 
 const vehiclesData = ref();
-const search = ref()
+const search = ref('')
 const pageLimit = ref(10);
 const sortValue = ref('model')
 const sortBy = ref('asc')
@@ -118,14 +118,13 @@ const getVehicles = async () => {
       sort: {
         value: sortValue.value,
         sorting: sortBy.value
-      }
+      },
+      search: search.value
     }
 
     const param = objectToQueryString(query)
 
-    const searchParam = (search.value) ? `&search=${search.value}` : '';
-
-    const vehicles = await $axios().get(`/v1/vehicle?${param}${searchParam}`);
+    const vehicles = await $axios().get(`/v1/vehicle?${param}`);
 
     vehiclesData.value = vehicles.data.data.rows;
   } catch (error) {
