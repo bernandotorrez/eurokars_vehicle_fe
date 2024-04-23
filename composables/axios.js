@@ -14,9 +14,9 @@ export const $axios = () => {
 
         config.headers['Eurokars-Auth-Token'] = authToken;
         config.headers['Eurokars-Auth-Refresh-Token'] = refreshToken;
-        
+
         return config;
-        }, function (error) {
+    }, function (error) {
         // Do something with request error
         return Promise.reject(error);
     });
@@ -25,31 +25,31 @@ export const $axios = () => {
         (response) => response,
         async (error) => {
             if (error.response && error.response.status === 401) {
-            // Access token has expired, refresh it
-            try {
-                // Retry the original request
-                const refreshToken = useCookie('eurokars-auth-refresh-token').value;
-                await $fetch(config.public.apiGatewayURL+'/v1/auth/refresh-token', {
-                    method: 'PUT',
-                    headers: {
-                        'eurokars-auth-refresh-token': refreshToken
-                    },
-                    onResponse(context) {
-                        const authToken = context.response.headers.get('eurokars-auth-token')
-                        error.config.headers['Eurokars-Auth-Token'] = authToken;
+                // Access token has expired, refresh it
+                try {
+                    // Retry the original request
+                    const refreshToken = useCookie('eurokars-auth-refresh-token').value;
+                    await $fetch(config.public.apiGatewayURL + '/v1/auth/refresh-token', {
+                        method: 'PUT',
+                        headers: {
+                            'eurokars-auth-refresh-token': refreshToken
+                        },
+                        onResponse(context) {
+                            const authToken = context.response.headers.get('eurokars-auth-token')
+                            error.config.headers['Eurokars-Auth-Token'] = authToken;
 
-                        const cookieAuthToken = useCookie('eurokars-auth-token', {
-                            maxAge: 60 * 60 * 24
-                        });
-                        cookieAuthToken.value = authToken;
-                    }
-                })
+                            const cookieAuthToken = useCookie('eurokars-auth-token', {
+                                maxAge: 60 * 60 * 24
+                            });
+                            cookieAuthToken.value = authToken;
+                        }
+                    })
 
-                return axiosInstance(error.config);
-            } catch (refreshError) {
-                // Handle token refresh error
-                throw refreshError;
-            }
+                    return axiosInstance(error.config);
+                } catch (refreshError) {
+                    // Handle token refresh error
+                    throw refreshError;
+                }
             }
             return Promise.reject(error);
         }

@@ -1,6 +1,9 @@
 <template>
     <div class="container">
         <div class="row g-3 align-items-center justify-items-center mt-4 col-md-12">
+            <Alert theme="danger" class="text-center" v-if="failMessage">
+                {{ failMessage }}
+            </Alert>
             <form class="form" @submit.prevent="addVehicle">
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-lg-6">
@@ -81,7 +84,7 @@
                 <div class="row mt-4">
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <button class="btn btn-success" type="submit" :disabled="isLoading">Add</button>
+                            <button class="btn btn-success" type="submit" :disabled="isLoading || errors">Add</button>
                         </div>
                     </div>
                 </div>
@@ -91,27 +94,13 @@
 </template>
 <script setup>
     import { ref } from 'vue'
-    import { toTypedSchema } from '@vee-validate/zod';
-    import * as zod from 'zod';
+    import vehicleSchema from '~/validation/vehicleSchema';
 
     const isLoading = ref(false);
-
-    const validationSchema = toTypedSchema(
-        zod.object({
-            model: zod.string().min(1, { message: "Required" }),
-            type: zod.string().min(1, { message: "Required" }),
-            colour: zod.string().min(1, { message: "Required" }),
-            fuel: zod.string().min(1, { message: "Required" }),
-            chassis: zod.string().min(1, { message: "Required" }),
-            engine_no: zod.string().min(1, { message: "Required" }),
-            date_reg: zod.string().min(1, { message: "Required" }),
-            curr: zod.string().min(1, { message: "Required" }),
-            price: zod.number().min(1, { message: "Required" }),
-        })
-    );
+    const failMessage = ref();
 
     const { handleSubmit, errors } = useForm({
-        validationSchema,
+        validationSchema: vehicleSchema,
     });
 
     const { value: model } = useField('model');
@@ -131,8 +120,9 @@
             const addVehicle = await $axios().post('/v1/vehicle', values)
 
             if (addVehicle.data.code === 201) return navigateTo('/vehicle')
+            else failMessage.value = addVehicle.data.message
         } catch (error) {
-            console.log(error.message)
+            failMessage.value = error.message
         }
 
         isLoading.value = false
