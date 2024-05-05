@@ -47,6 +47,9 @@
                 No
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
+                Action
+              </b-th>
+              <b-th scope="col" text-background="primary" text-alignment="center">
                 Model
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
@@ -78,6 +81,11 @@
           <b-tbody>
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
+              <b-td>
+                <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }">
+                  <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
+                </NuxtLink>   
+              </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
               <b-td>{{ vehicle.colour }}</b-td>
