@@ -47,7 +47,12 @@
                 No
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
-                Action
+                Action 
+                <BFormCheckInput
+                  v-model="isChecked"
+                  @input="checkAllList"
+                />
+                {{ isChecked }}
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
                 Model
@@ -82,9 +87,10 @@
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
               <b-td>
-                <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }">
+                <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }" class="pr-4">
                   <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
                 </NuxtLink>   
+                <BFormCheckInput class="check"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -114,6 +120,7 @@ const search = ref('')
 const pageLimit = ref(10);
 const sortValue = ref('model')
 const sortBy = ref('asc')
+const isChecked = ref(false);
 
 const getVehicles = async () => {
   try {
@@ -144,6 +151,15 @@ const filter = async () => {
   vehiclesData.value = null
 
   await getVehicles();
+}
+
+const checkAllList = () => {
+  const checkEl = document.querySelectorAll('.check')
+  console.log(isChecked)
+  checkEl.forEach((item, key) => {
+    item.value = isChecked.value
+    item.checked = isChecked.value
+  })
 }
 
 onMounted(async () => {
