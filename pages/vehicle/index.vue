@@ -90,6 +90,7 @@
                   <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
                 </NuxtLink>   
                 <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle.toString()" class="check"/>
+                <BIcon icon="mingcute:delete-fill" class="fa text-danger fa-2x" @click="showModal(vehicle.id_vehicle)"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -106,6 +107,33 @@
             </b-tr>
           </b-tbody>
         </b-table>
+
+        <!-- Modal -->
+        <Modal ref="deleteModal"
+        id="deleteModal"
+        backdrop="static"
+        :keyboard="false">
+          <ModalDialog centered>
+            <ModalContent>
+              <ModalHeader>
+                <ModalTitle>Delete Data?</ModalTitle>
+                <CloseButton dismiss="modal" />
+              </ModalHeader>
+              <ModalBody>Are you sure want to delete with id : {{ selectedId }}</ModalBody>
+              <ModalFooter>
+                <b-button
+                  button="secondary"
+                  dismiss="modal"
+                >
+                  Close
+                </b-button>
+                <b-button button="danger" @click="deleteData()">
+                  Delete
+                </b-button>
+              </ModalFooter>
+            </ModalContent>
+          </ModalDialog>
+        </Modal>
       </div>
     </div>
   </div>
@@ -121,6 +149,8 @@ const sortValue = ref('model')
 const sortBy = ref('asc')
 const isChecked = ref(false);
 const checked = ref([])
+const deleteModal = ref(null);
+const selectedId = ref()
 
 const getVehicles = async () => {
   try {
@@ -179,6 +209,26 @@ const childCheck = (id) => {
   }
 
   console.log(checked.value)
+}
+
+const showModal = (id) => {
+  console.log(id)
+
+  selectedId.value = parseInt(id)
+
+  if (deleteModal.value) {
+    deleteModal.value.show()
+  } else {
+    deleteModal.value.hide()
+  }
+}
+
+const deleteData = async () => {
+  const deleteData = await $axios().delete(`/v1/vehicle/${selectedId.value}`)
+  
+  if (deleteData.data.success) {
+    await getVehicles();
+  }
 }
 
 onMounted(async () => {
