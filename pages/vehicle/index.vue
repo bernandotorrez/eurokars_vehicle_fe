@@ -227,6 +227,7 @@ const deleteData = async () => {
   const deleteData = await $axios().delete(`/v1/vehicle/${selectedId.value}`)
   
   if (deleteData.data.success) {
+    deleteModal.value.hide()
     await getVehicles();
   }
 }
