@@ -50,9 +50,8 @@
                 Action 
                 <BFormCheckInput
                   v-model="isChecked"
-                  @input="checkAllList"
+                  @change="checkAllList"
                 />
-                {{ isChecked }}
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
                 Model
@@ -90,7 +89,7 @@
                 <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }" class="pr-4">
                   <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
                 </NuxtLink>   
-                <BFormCheckInput class="check"/>
+                <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle" class="check"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -121,6 +120,7 @@ const pageLimit = ref(10);
 const sortValue = ref('model')
 const sortBy = ref('asc')
 const isChecked = ref(false);
+const checked = ref([])
 
 const getVehicles = async () => {
   try {
@@ -155,11 +155,29 @@ const filter = async () => {
 
 const checkAllList = () => {
   const checkEl = document.querySelectorAll('.check')
-  console.log(isChecked)
+  
   checkEl.forEach((item, key) => {
     item.value = isChecked.value
     item.checked = isChecked.value
+
+    const id = item.getAttribute('id');
+
+    childCheck(id)
   })
+
+  console.log(checked.value)
+}
+
+const childCheck = (id) => {
+  id = parseInt(id)
+  const index = checked.value.indexOf(id);
+  if (index !== -1) {
+      checked.value.splice(index, 1);
+  } else {
+      checked.value.push(id)
+  }
+
+  console.log(checked.value)
 }
 
 onMounted(async () => {
