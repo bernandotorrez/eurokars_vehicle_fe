@@ -149,6 +149,7 @@ const getVehicles = async () => {
 
 const filter = async () => {
   vehiclesData.value = null
+  checked.value = []
 
   await getVehicles();
 }
