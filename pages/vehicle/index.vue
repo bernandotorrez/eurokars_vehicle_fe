@@ -47,6 +47,13 @@
                 No
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
+                Action 
+                <BFormCheckInput
+                  v-model="isChecked"
+                  @change="checkAllList"
+                />
+              </b-th>
+              <b-th scope="col" text-background="primary" text-alignment="center">
                 Model
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
@@ -78,6 +85,13 @@
           <b-tbody>
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
+              <b-td>
+                <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }" class="pr-4">
+                  <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
+                </NuxtLink>   
+                <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle.toString()" class="check"/>
+                <BIcon icon="mingcute:delete-fill" class="fa text-danger fa-2x" @click="showModal(vehicle.id_vehicle)"/>
+              </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
               <b-td>{{ vehicle.colour }}</b-td>
@@ -93,6 +107,33 @@
             </b-tr>
           </b-tbody>
         </b-table>
+
+        <!-- Modal -->
+        <Modal ref="deleteModal"
+        id="deleteModal"
+        backdrop="static"
+        :keyboard="false">
+          <ModalDialog centered>
+            <ModalContent>
+              <ModalHeader>
+                <ModalTitle>Delete Data?</ModalTitle>
+                <CloseButton dismiss="modal" />
+              </ModalHeader>
+              <ModalBody>Are you sure want to delete with id : {{ selectedId }}</ModalBody>
+              <ModalFooter>
+                <b-button
+                  button="secondary"
+                  dismiss="modal"
+                >
+                  Close
+                </b-button>
+                <b-button button="danger" @click="deleteData()">
+                  Delete
+                </b-button>
+              </ModalFooter>
+            </ModalContent>
+          </ModalDialog>
+        </Modal>
       </div>
     </div>
   </div>
@@ -106,6 +147,10 @@ const search = ref('')
 const pageLimit = ref(10);
 const sortValue = ref('model')
 const sortBy = ref('asc')
+const isChecked = ref(false);
+const checked = ref([])
+const deleteModal = ref(null);
+const selectedId = ref()
 
 const getVehicles = async () => {
   try {
@@ -134,8 +179,57 @@ const getVehicles = async () => {
 
 const filter = async () => {
   vehiclesData.value = null
+  checked.value = []
 
   await getVehicles();
+}
+
+const checkAllList = () => {
+  const checkEl = document.querySelectorAll('.check')
+  
+  checkEl.forEach((item, key) => {
+    item.value = isChecked.value
+    item.checked = isChecked.value
+
+    const id = item.getAttribute('id');
+
+    childCheck(id)
+  })
+
+  console.log(checked.value)
+}
+
+const childCheck = (id) => {
+  id = parseInt(id)
+  const index = checked.value.indexOf(id);
+  if (index !== -1) {
+      checked.value.splice(index, 1);
+  } else {
+      checked.value.push(id)
+  }
+
+  console.log(checked.value)
+}
+
+const showModal = (id) => {
+  console.log(id)
+
+  selectedId.value = parseInt(id)
+
+  if (deleteModal.value) {
+    deleteModal.value.show()
+  } else {
+    deleteModal.value.hide()
+  }
+}
+
+const deleteData = async () => {
+  const deleteData = await $axios().delete(`/v1/vehicle/${selectedId.value}`)
+  
+  if (deleteData.data.success) {
+    deleteModal.value.hide()
+    await getVehicles();
+  }
 }
 
 onMounted(async () => {

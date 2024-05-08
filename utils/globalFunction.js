@@ -26,3 +26,7 @@ export const formatCurrency = (amount) => {
 export const formatDate = (date) => {
   return moment(date).tz('Asia/Bangkok').format('DD-MM-YYYY HH:mm:ss');
 }
+
+export const formatDateInput = (date) => {
+  return moment(date).tz('Asia/Bangkok').format('YYYY-MM-DD');
+}

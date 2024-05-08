@@ -12,7 +12,7 @@
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink active to="/vehicle">
+              <NavLink to="/vehicle">
                 Vehicle
               </NavLink>
             </NavItem>
