@@ -132,8 +132,6 @@
       date_reg.value = formatDateInput(data.date_reg);
       curr.value = data.curr;
       price.value = data.price;
-
-      console.log(formatDateInput(data.date_reg))
       
     } catch (error) {
       failMessage.value = error.message

@@ -33,8 +33,17 @@
       <div class="col-sm-12 col-lg-1">
         <button class="btn btn-primary" @click="filter" :disabled="!vehiclesData">Search</button>
       </div>
-      <div class="col-sm-12 col-lg-1 offset-lg-1">
-        <NuxtLink class="btn btn-success" to="/vehicle/add">Add</NuxtLink>
+    </div>
+
+    <div class="row g-3 align-items-center justify-items-center mt-4 col-md-12">
+      <div class="col-sm-12 col-lg-12">
+        <NuxtLink class="btn btn-primary" to="/vehicle/add">Add</NuxtLink>
+        <BButton class="btn btn-success mx-3" 
+          :disabled="!(checked.length === 1)" 
+          @click="edit">Edit</BButton>
+        <BButton class="btn btn-danger"
+          :disabled="!(checked.length === 1)"
+          @click="showModal()">Delete</BButton>
       </div>
     </div>
 
@@ -85,12 +94,8 @@
           <b-tbody>
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
-              <b-td>
-                <NuxtLink :to="{ path: `/vehicle/edit/${vehicle.id_vehicle}` }" class="pr-4">
-                  <BIcon icon="tabler:edit" class="fa text-success fa-2x"/>
-                </NuxtLink>   
+              <b-td>  
                 <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle.toString()" class="check"/>
-                <BIcon icon="mingcute:delete-fill" class="fa text-danger fa-2x" @click="showModal(vehicle.id_vehicle)"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -119,7 +124,7 @@
                 <ModalTitle>Delete Data?</ModalTitle>
                 <CloseButton dismiss="modal" />
               </ModalHeader>
-              <ModalBody>Are you sure want to delete with id : {{ selectedId }}</ModalBody>
+              <ModalBody>Are you sure want to delete with id : {{ checked[0] }}</ModalBody>
               <ModalFooter>
                 <b-button
                   button="secondary"
@@ -150,7 +155,6 @@ const sortBy = ref('asc')
 const isChecked = ref(false);
 const checked = ref([])
 const deleteModal = ref(null);
-const selectedId = ref()
 
 const getVehicles = async () => {
   try {
@@ -195,27 +199,27 @@ const checkAllList = () => {
 
     childCheck(id)
   })
-
-  console.log(checked.value)
 }
 
 const childCheck = (id) => {
   id = parseInt(id)
+
   const index = checked.value.indexOf(id);
+
   if (index !== -1) {
-      checked.value.splice(index, 1);
+    checked.value.splice(index, 1);
   } else {
-      checked.value.push(id)
+    checked.value.push(id)
   }
 
   console.log(checked.value)
 }
 
-const showModal = (id) => {
-  console.log(id)
+const edit = () => {
+  return navigateTo({ path: `/vehicle/edit/${checked.value[0]}` })
+}
 
-  selectedId.value = parseInt(id)
-
+const showModal = () => {
   if (deleteModal.value) {
     deleteModal.value.show()
   } else {
@@ -224,7 +228,7 @@ const showModal = (id) => {
 }
 
 const deleteData = async () => {
-  const deleteData = await $axios().delete(`/v1/vehicle/${selectedId.value}`)
+  const deleteData = await $axios().delete(`/v1/vehicle/${checked.value[0]}`)
   
   if (deleteData.data.success) {
     deleteModal.value.hide()
