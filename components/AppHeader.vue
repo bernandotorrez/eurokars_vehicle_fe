@@ -19,7 +19,7 @@
           </NavbarNavList>
           <BForm flex>
             <b-a button="outline-light" href="/login" @click="logout">
-              Logout
+              {{ loginData?.username }}, Logout
             </b-a>
           </BForm>
         </NavbarCollapse>
@@ -30,6 +30,7 @@
 
 <script setup>
 const { authLogout } = useAuthStore();
+const { loginData } = storeToRefs(useAuthStore())
 
 const logout = async () => {
   await authLogout();
