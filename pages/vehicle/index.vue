@@ -95,12 +95,7 @@
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
               <b-td>  
-                <input
-                class="form-check-input"
-                type="checkbox"
-                :true-value="[]"
-                :value="vehicle.id_vehicle"
-                v-model="checked"/>
+                <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle.toString()" class="check"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -151,6 +146,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { parse } from 'vue/compiler-sfc';
 
 const vehiclesData = ref();
 const search = ref('')
@@ -194,20 +190,33 @@ const filter = async () => {
 }
 
 const checkAllList = () => {
-  checked.value = []
+  // checked.value = []
   
   const checkEl = document.querySelectorAll('.check')
-
-  checked.value = []
+  const notCheckedEl = document.querySelectorAll('.check:not(:checked)')
   
-  checkEl.forEach((item, key) => {
-    item.value = isChecked.value
-    item.checked = isChecked.value
+  if (isChecked.value) {
+    notCheckedEl.forEach((item, key) => {
+      item.value = true
+      item.checked = true
 
-    const id = item.getAttribute('id');
+      const id = item.getAttribute('id');
+      checked.value.push(parseInt(id))
 
-    childCheck(id)
-  })
+      // childCheck(id)
+    })
+  } else {
+    checkEl.forEach((item, key) => {
+      item.value = false
+      item.checked = false
+
+      // childCheck(id)
+    })
+
+    checked.value = []
+  }
+
+  console.log(checked.value)
 }
 
 const childCheck = (id) => {
