@@ -95,7 +95,12 @@
             <b-tr v-if="vehiclesData" v-for="( vehicle, index ) in vehiclesData" v-bind:key="vehicle">
               <b-td text-alignment="center">{{ index + 1 }}</b-td>
               <b-td>  
-                <BFormCheckInput @change="childCheck(vehicle.id_vehicle)" :id="vehicle.id_vehicle.toString()" class="check"/>
+                <input
+                class="form-check-input"
+                type="checkbox"
+                :true-value="[]"
+                :value="vehicle.id_vehicle"
+                v-model="checked"/>
               </b-td>
               <b-td>{{ vehicle.model }}</b-td>
               <b-td>{{ vehicle.type }}</b-td>
@@ -189,6 +194,8 @@ const filter = async () => {
 }
 
 const checkAllList = () => {
+  checked.value = []
+  
   const checkEl = document.querySelectorAll('.check')
   
   checkEl.forEach((item, key) => {
