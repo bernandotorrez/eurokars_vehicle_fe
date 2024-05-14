@@ -37,6 +37,8 @@ export const useAuthStore = defineStore('auth', {
           const cookieRefreshToken = useCookie('eurokars-auth-refresh-token');
           cookieRefreshToken.value = refreshToken;
 
+          sessionStorage.setItem('user', JSON.stringify(data.data))
+
           return navigateTo('/')
         }
       } catch (error) {
@@ -62,6 +64,8 @@ export const useAuthStore = defineStore('auth', {
           const cookieRefreshToken = useCookie('eurokars-auth-refresh-token');
           cookieRefreshToken.value = null;
 
+          sessionStorage.removeItem('user')
+
           this.resetState();
 
           return navigateTo('/login')
@@ -69,6 +73,9 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         alert(error.message)
       }
+    },
+    setUser (user) {
+      this.loginData = user;
     },
     async resetState () {
       this.isLoading = false;

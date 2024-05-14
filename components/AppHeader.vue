@@ -19,7 +19,7 @@
           </NavbarNavList>
           <BForm flex>
             <b-a button="outline-light" href="/login" @click="logout">
-              {{ loginData.username }}, Logout
+              {{ loginData?.username }}, Logout
             </b-a>
           </BForm>
         </NavbarCollapse>

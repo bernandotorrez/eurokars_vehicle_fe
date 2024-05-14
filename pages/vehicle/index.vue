@@ -197,6 +197,8 @@ const checkAllList = () => {
   checked.value = []
   
   const checkEl = document.querySelectorAll('.check')
+
+  checked.value = []
   
   checkEl.forEach((item, key) => {
     item.value = isChecked.value
