@@ -114,14 +114,20 @@
         </b-table>
 
         <Pagination>
-          <PageItem>
+          <PageItem @click="setPage(1)" :disabled="lastPaginationClicked == 1">
+            <PageLink>First</PageLink>
+          </PageItem>
+          <PageItem @click="setPage(lastPaginationClicked-1)">
             <PageLink>Previous</PageLink>
           </PageItem>
           <PageItem v-for="(item, index) in paginationPage" :class="{ active: lastPaginationClicked == item }" :key="index" @click="setPage(item);">
             <PageLink>{{ item }}</PageLink>
           </PageItem>
           <PageItem>
-            <PageLink>Next</PageLink>
+            <PageLink @click="setPage(lastPaginationClicked+1)">Next</PageLink>
+          </PageItem>
+          <PageItem @click="() => console.log(vehicleLength / query.page.number)">
+            <PageLink>Last</PageLink>
           </PageItem>
         </Pagination>
 
@@ -169,7 +175,7 @@ const isChecked = ref(false);
 const checked = ref([])
 const deleteModal = ref(null);
 const paginationPage = ref([]);
-const lastPaginationClicked = ref();
+const lastPaginationClicked = ref(1);
 
 const getVehicles = async () => {
   try {
@@ -193,20 +199,7 @@ const getVehicles = async () => {
     vehiclesData.value = vehicles.data.data.rows;
     vehicleLength.value = vehicles.data.data.count;
 
-     // Calculate pagination range
-     const totalPageCount = Math.ceil(vehicles.data.data.count / pageLimit.value);
-      const maxDisplayedPages = 10;
-      let startPage = Math.max(1, query.page.number - Math.floor(maxDisplayedPages / 2));
-      let endPage = Math.min(totalPageCount, startPage + maxDisplayedPages - 1);
-
-      // Adjust startPage and endPage if necessary to always display 10 pages
-      if (endPage - startPage + 1 < maxDisplayedPages) {
-        startPage = Math.max(1, endPage - maxDisplayedPages + 1);
-      }
-
-      paginationPage.value = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
-
-      lastPaginationClicked.value = query.page.number;
+    await setPage(query.page.number)
   } catch (error) {
     vehiclesData.value = [];
     vehicleLength.value = 0;
@@ -214,6 +207,7 @@ const getVehicles = async () => {
 }
 
 const setPage = async (pageNumber) => {
+  console.log(lastPaginationClicked.value)
   try {
     const query = {
       page: {
