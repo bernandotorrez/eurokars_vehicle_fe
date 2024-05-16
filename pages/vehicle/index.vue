@@ -210,8 +210,6 @@ const getVehicles = async () => {
 const setPage = async (pageNumber) => {
   lastPaginationClicked.value = pageNumber;
 
-  console.log(lastPaginationClicked.value)
-
   try {
     const query = {
       page: {
@@ -283,8 +281,6 @@ const checkAllList = () => {
 
     checked.value = []
   }
-
-  console.log(checked.value)
 }
 
 const childCheck = (id) => {
@@ -297,8 +293,6 @@ const childCheck = (id) => {
   } else {
     checked.value.push(id)
   }
-
-  console.log(checked.value)
 }
 
 const edit = () => {

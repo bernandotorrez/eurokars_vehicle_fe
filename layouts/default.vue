@@ -12,12 +12,20 @@
 <script setup>
 const { setUser } = useAuthStore()
 
-onBeforeMount(async () => {
-    const userData = sessionStorage.getItem('user')
+const getUserSelf = async () => {
+    const selfData = await $axios().get('/v1/user/self')
 
-    if (userData) {
-      console.log(userData)
-      setUser(JSON.parse(userData)) 
+    const { data } = selfData.data
+
+    const userData = {
+        username: data.username,
+        level: data.username
     }
+    
+   setUser(userData)
+}
+
+onMounted(async () => {
+    await getUserSelf()
 })
 </script>
