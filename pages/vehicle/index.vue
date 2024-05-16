@@ -108,13 +108,13 @@
               <b-td>{{ formatCurrency(vehicle.price) }}</b-td>
             </b-tr>
             <b-tr v-else>
-              <b-td text-alignment="center" colspan="10">Loading ...</b-td>
+              <b-td text-alignment="center" colspan="11">Loading ...</b-td>
             </b-tr>
           </b-tbody>
         </b-table>
 
         <Pagination>
-          <PageItem @click="setPage(1)" :disabled="lastPaginationClicked == 1">
+          <PageItem @click="setPage(1)">
             <PageLink>First</PageLink>
           </PageItem>
           <PageItem @click="setPage(lastPaginationClicked-1)">
@@ -126,7 +126,7 @@
           <PageItem>
             <PageLink @click="setPage(lastPaginationClicked+1)">Next</PageLink>
           </PageItem>
-          <PageItem @click="() => console.log(vehicleLength / query.page.number)">
+          <PageItem @click="setPage(lastPage)">
             <PageLink>Last</PageLink>
           </PageItem>
         </Pagination>
@@ -176,6 +176,7 @@ const checked = ref([])
 const deleteModal = ref(null);
 const paginationPage = ref([]);
 const lastPaginationClicked = ref(1);
+const lastPage = computed(() => Math.ceil(vehicleLength.value / pageLimit.value))
 
 const getVehicles = async () => {
   try {
@@ -207,7 +208,10 @@ const getVehicles = async () => {
 }
 
 const setPage = async (pageNumber) => {
+  lastPaginationClicked.value = pageNumber;
+
   console.log(lastPaginationClicked.value)
+
   try {
     const query = {
       page: {
@@ -240,8 +244,6 @@ const setPage = async (pageNumber) => {
     }
 
     paginationPage.value = Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
-
-    lastPaginationClicked.value = pageNumber;
   } catch (error) {
     vehiclesData.value = [];
     vehicleLength.value = 0;
