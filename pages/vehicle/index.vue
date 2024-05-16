@@ -42,7 +42,7 @@
           :disabled="!(checked.length === 1)" 
           @click="edit">Edit</BButton>
         <BButton class="btn btn-danger"
-          :disabled="!(checked.length === 1)"
+          :disabled="(checked.length === 0)"
           @click="showModal()">Delete</BButton>
       </div>
     </div>
@@ -56,7 +56,6 @@
                 No
               </b-th>
               <b-th scope="col" text-background="primary" text-alignment="center">
-                Action 
                 <BFormCheckInput
                   v-model="isChecked"
                   @change="checkAllList"
@@ -142,7 +141,7 @@
                 <ModalTitle>Delete Data?</ModalTitle>
                 <CloseButton dismiss="modal" />
               </ModalHeader>
-              <ModalBody>Are you sure want to delete with id : {{ checked[0] }}</ModalBody>
+              <ModalBody>Are you sure want to delete with id : {{ checked.toString() }}</ModalBody>
               <ModalFooter>
                 <b-button
                   button="secondary"
@@ -308,10 +307,13 @@ const showModal = () => {
 }
 
 const deleteData = async () => {
-  const deleteData = await $axios().delete(`/v1/vehicle/${checked.value[0]}`)
+  const arrayId = checked.value.toString()
+
+  const deleteData = await $axios().delete(`/v1/vehicle/${arrayId}`)
   
   if (deleteData.data.success) {
     deleteModal.value.hide()
+    checked.value = [];
     await getVehicles();
   }
 }
