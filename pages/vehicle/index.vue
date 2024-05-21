@@ -37,13 +37,13 @@
 
     <div class="row g-3 align-items-center justify-items-center mt-4 col-md-12">
       <div class="col-sm-12 col-lg-12">
-        <NuxtLink class="btn btn-primary" to="/vehicle/add">Add</NuxtLink>
+        <NuxtLink class="btn btn-primary" to="/vehicle/add"><i class="fas fa-plus"></i> Add</NuxtLink>
         <BButton class="btn btn-success mx-3" 
           :disabled="!(checked.length === 1)" 
-          @click="edit">Edit</BButton>
+          @click="edit"><i class="fas fa-pencil"></i> Edit</BButton>
         <BButton class="btn btn-danger"
           :disabled="(checked.length === 0)"
-          @click="showModal()">Delete</BButton>
+          @click="showModal()"><i class="fas fa-trash"></i> Delete</BButton>
       </div>
     </div>
 
@@ -112,18 +112,18 @@
           </b-tbody>
         </b-table>
 
-        <Pagination>
+        <Pagination class="justify-content-center">
           <PageItem @click="setPage(1)">
             <PageLink>First</PageLink>
           </PageItem>
           <PageItem @click="setPage(lastPaginationClicked-1)">
-            <PageLink>Previous</PageLink>
+            <PageLink><</PageLink>
           </PageItem>
           <PageItem v-for="(item, index) in paginationPage" :class="{ active: lastPaginationClicked == item }" :key="index" @click="setPage(item);">
             <PageLink>{{ item }}</PageLink>
           </PageItem>
           <PageItem>
-            <PageLink @click="setPage(lastPaginationClicked+1)">Next</PageLink>
+            <PageLink @click="setPage(lastPaginationClicked+1)">></PageLink>
           </PageItem>
           <PageItem @click="setPage(lastPage)">
             <PageLink>Last</PageLink>
@@ -163,6 +163,8 @@
 
 <script setup>
 import { ref } from 'vue';
+
+const { $swal } = useNuxtApp();
 
 const vehiclesData = ref();
 const vehicleLength = ref(0)
@@ -231,7 +233,7 @@ const setPage = async (pageNumber) => {
 
     // Calculate pagination range
     const totalPageCount = Math.ceil(vehicles.data.data.count / pageLimit.value);
-    const maxDisplayedPages = 10;
+    const maxDisplayedPages = 5;
     let startPage = Math.max(1, pageNumber - Math.floor(maxDisplayedPages / 2));
     let endPage = Math.min(totalPageCount, startPage + maxDisplayedPages - 1);
 
@@ -295,7 +297,13 @@ const childCheck = (id) => {
 }
 
 const edit = () => {
-  return navigateTo({ path: `/vehicle/edit/${checked.value[0]}` })
+  $swal.fire({
+    title: 'Error!',
+    text: 'Do you want to continue',
+    icon: 'error',
+    confirmButtonText: 'Cool'
+  })
+  //return navigateTo({ path: `/vehicle/edit/${checked.value[0]}` })
 }
 
 const showModal = () => {

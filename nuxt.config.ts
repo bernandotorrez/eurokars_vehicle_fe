@@ -16,7 +16,8 @@ export default defineNuxtConfig({
     },
   },
   css: [
-    "bootstrap/scss/bootstrap.scss"
+    "bootstrap/scss/bootstrap.scss",
+    '@fortawesome/fontawesome-free/css/all.css'
   ],
   runtimeConfig: {
     public: {
