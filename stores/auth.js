@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
       });
       cookieAuthToken.value = access_token;
 
-      const cookieIdToken = useCookie('eurokars-auth-id-token', {
+      const cookieIdToken = useCookie('eurokars-auth-refresh-token', {
         maxAge: 60 * 60 * 24
       });
       cookieIdToken.value = id_token;
