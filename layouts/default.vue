@@ -26,6 +26,6 @@ const getUserSelf = async () => {
 }
 
 onMounted(async () => {
-    await getUserSelf()
+    // await getUserSelf()
 })
 </script>

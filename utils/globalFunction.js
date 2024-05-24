@@ -30,3 +30,12 @@ export const formatDate = (date) => {
 export const formatDateInput = (date) => {
   return moment(date).tz('Asia/Bangkok').format('YYYY-MM-DD');
 }
+
+export const queryStringToObject = (queryString) => {
+  const params = new URLSearchParams(queryString);
+  const obj = {};
+  for (const [key, value] of params) {
+    obj[key] = decodeURIComponent(value);
+  }
+  return obj;
+}
