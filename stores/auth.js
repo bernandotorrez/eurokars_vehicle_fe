@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', {
       this.failMessage = '';
       
       try {
-        const login = await $axios().post('/v1/auth/login', {
+        const login = await $axios().post('/v1/webapp/auth/login', {
           username,
           password
         })
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async authLogout () {
       try {
-        const logout = await $axios().delete('/v1/auth/logout')
+        const logout = await $axios().delete('/v1/webapp/auth/logout')
 
         if (logout.data.code === 200) {
           const cookieAuthToken = useCookie('eurokars-auth-token')

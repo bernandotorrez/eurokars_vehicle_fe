@@ -16,7 +16,7 @@
   })
 
   onMounted(async () => {
-    const azure = await $axios().get('/v1/auth/login/sso')
+    const azure = await $axios().get('/v1/webapp/auth/login/sso')
 
     window.location.href = azure.data.data;
   })

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Redirect
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    Login Success! Redirecting to Home Page ...
   </div>
 </template>
 
